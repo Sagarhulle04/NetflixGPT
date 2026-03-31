@@ -1,7 +1,24 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import Header from "./Header";
+import { checkValidation } from "../utils/validate";
 
 const Login = () => {
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [errors, setErrors] = useState("");
+
+  const email = useRef();
+  const password = useRef();
+
+  function handleSubmitForm(e) {
+    e.preventDefault();
+
+    const message = checkValidation(
+      email.current.value,
+      password.current.value,
+    );
+    setErrors(message);
+  }
+
   return (
     <div className="relative h-screen w-full overflow-hidden">
       <img
@@ -10,7 +27,7 @@ const Login = () => {
         className="absolute inset-0 w-full h-full object-cover -z-10"
       />
 
-      <div className="absolute inset-0 bg-black/70"></div>
+      <div className="absolute inset-0 bg-black/30"></div>
 
       <div className="absolute inset-0 bg-linear-to-b from-black via-transparent to-black"></div>
 
@@ -18,27 +35,57 @@ const Login = () => {
         <Header />
       </div>
 
-      <div className="relative z-10 flex justify-center items-center h-full">
+      <form
+        onSubmit={handleSubmitForm}
+        className="relative z-10 flex justify-center items-center h-full"
+      >
         <div className="bg-black/80 p-10 rounded-md text-white w-100">
-          <h1 className="text-3xl font-bold mb-6">Sign In</h1>
+          <h1 className="text-3xl font-bold mb-6">
+            {isSignUp ? "Sign Up" : "Sign In"}
+          </h1>
+
+          {isSignUp && (
+            <input
+              type="text"
+              placeholder="Full Name"
+              className="w-full mb-4 p-3 bg-gray-800 rounded"
+            />
+          )}
 
           <input
             type="text"
-            placeholder="Email or phone number"
+            ref={email}
+            placeholder="Email"
             className="w-full mb-4 p-3 bg-gray-800 rounded"
           />
 
           <input
             type="password"
+            ref={password}
             placeholder="Password"
             className="w-full mb-6 p-3 bg-gray-800 rounded"
           />
 
-          <button className="w-full bg-red-600 py-3 rounded hover:bg-red-700">
-            Sign In
+          <button className="w-full bg-red-600 py-3 rounded hover:bg-red-700 cursor-pointer">
+            {isSignUp ? "Sign Up" : "Sign In"}
           </button>
+
+          <p className="text-red-600 relative top-2">
+            {" "}
+            {errors.length > 0 && errors}{" "}
+          </p>
+
+          <p className="relative top-3">
+            New Register ?{" "}
+            <span
+              className="text-blue-600 cursor-pointer"
+              onClick={() => setIsSignUp(!isSignUp)}
+            >
+              {isSignUp ? "Sign In" : "Sign Up"}
+            </span>{" "}
+          </p>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
