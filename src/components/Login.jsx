@@ -5,6 +5,7 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
@@ -37,10 +38,15 @@ const Login = () => {
         auth,
         email.current.value,
         password.current.value,
-        name.current.value,
       )
-        .then((userCredential) => {
+        .then(async (userCredential) => {
           const user = userCredential.user;
+
+          const displayName = name.current?.value?.trim();
+          if (displayName) {
+            await updateProfile(user, { displayName });
+          }
+
           dispatch(
             addUser({
               uid: user.uid,
@@ -48,12 +54,12 @@ const Login = () => {
               displayName: user.displayName,
             }),
           );
-          console.log(user);
+
           toast.success("Account Created Successfully");
           name.current.value = "";
           email.current.value = "";
           password.current.value = "";
-          navigate("/");
+          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -69,9 +75,15 @@ const Login = () => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
-          console.log(user);
+          dispatch(
+            addUser({
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+            }),
+          );
           toast.success("Logged In Successfull");
-          navigate("/");
+          navigate("/browse");
         })
         .catch((error) => {
           toast.error("Invalid Credentials");
