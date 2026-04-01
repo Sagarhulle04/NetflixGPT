@@ -38,28 +38,25 @@ const Login = () => {
         auth,
         email.current.value,
         password.current.value,
+        name.current.value,
       )
         .then(async (userCredential) => {
           const user = userCredential.user;
+          updateProfile(user, {
+            displayName: name.current.value,
+            photoURL: "https://example.com/jane-q-user/profile.jpg",
+          })
+            .then(() => {
+              toast.success("Account Created Successfully");
+              navigate("/");
+            })
+            .catch((error) => {
+              toast.success(error.message);
+            });
 
-          const displayName = name.current?.value?.trim();
-          if (displayName) {
-            await updateProfile(user, { displayName });
-          }
-
-          dispatch(
-            addUser({
-              uid: user.uid,
-              email: user.email,
-              displayName: user.displayName,
-            }),
-          );
-
-          toast.success("Account Created Successfully");
           name.current.value = "";
           email.current.value = "";
           password.current.value = "";
-          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;

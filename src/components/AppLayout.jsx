@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Provider, useDispatch } from "react-redux";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import store from "../utils/store";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { addUser, removeUser } from "../utils/userSlice";
