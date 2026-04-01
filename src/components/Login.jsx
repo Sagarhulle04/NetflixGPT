@@ -1,13 +1,26 @@
 import React, { useRef, useState } from "react";
 import Header from "./Header";
 import { checkValidation } from "../utils/validate";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
+import app from "../utils/firebase";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [errors, setErrors] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const email = useRef();
-  const password = useRef();
+  const email = useRef(null);
+  const password = useRef(null);
+  const name = useRef(null);
 
   function handleSubmitForm(e) {
     e.preventDefault();
@@ -16,7 +29,54 @@ const Login = () => {
       email.current.value,
       password.current.value,
     );
-    setErrors(message);
+    if (message) return setErrors(message);
+
+    if (isSignUp) {
+      const auth = getAuth(app);
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value,
+        name.current.value,
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+          dispatch(
+            addUser({
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+            }),
+          );
+          console.log(user);
+          toast.success("Account Created Successfully");
+          name.current.value = "";
+          email.current.value = "";
+          password.current.value = "";
+          navigate("/");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrors(errorCode + " - " + errorMessage);
+        });
+    } else {
+      const auth = getAuth(app);
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value,
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log(user);
+          toast.success("Logged In Successfull");
+          navigate("/");
+        })
+        .catch((error) => {
+          toast.error("Invalid Credentials");
+        });
+    }
   }
 
   return (
@@ -47,6 +107,7 @@ const Login = () => {
           {isSignUp && (
             <input
               type="text"
+              ref={name}
               placeholder="Full Name"
               className="w-full mb-4 p-3 bg-gray-800 rounded"
             />
