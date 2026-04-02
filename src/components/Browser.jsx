@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { removeUser } from "../utils/userSlice";
 import toast from "react-hot-toast";
+import Browse from "./Browse";
 
 const Browser = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
-  console.log(user);
 
   function handleSignOut() {
     const auth = getAuth();
@@ -30,7 +30,7 @@ const Browser = () => {
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         <Header />
         <div className="flex gap-2 items-center">
-          <p className="font-bold"> {user.displayName} </p>
+          <p className="font-bold"> {user?.displayName} </p>
           <button
             type="button"
             onClick={handleSignOut}
@@ -45,6 +45,7 @@ const Browser = () => {
           />
         </div>
       </div>
+      <Browse />
     </div>
   );
 };

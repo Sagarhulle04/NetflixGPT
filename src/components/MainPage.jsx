@@ -34,7 +34,11 @@ const MainPage = () => {
       </div>
 
       <div className="max-w-[45%] text-center mx-auto flex relative top-30 flex-col  items-center text-white">
-        <h1 className="text-6xl font-bold">
+        <p className="relative top-3.5 text-xl font-bold">
+          <span className="text-red-500">* Disclaimer</span> - This is a
+          personal project and not affiliated with Netflix.
+        </p>
+        <h1 className="text-6xl mt-8 font-bold">
           Unlimited movies, shows, and more
         </h1>
         <p className="relative top-3.5 text-xl font-bold">

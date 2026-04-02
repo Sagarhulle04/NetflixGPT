@@ -1,27 +1,46 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Header from "./Header";
 import { checkValidation } from "../utils/validate";
 import {
   getAuth,
+  onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import app from "../utils/firebase";
 import toast from "react-hot-toast";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [errors, setErrors] = useState("");
+  const [authChecked, setAuthChecked] = useState(false);
+  const user = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const email = useRef(null);
   const password = useRef(null);
   const name = useRef(null);
+
+  useEffect(() => {
+    const auth = getAuth(app);
+    const unsubscribe = onAuthStateChanged(auth, () => {
+      setAuthChecked(true);
+    });
+    return unsubscribe;
+  }, []);
+
+  if (!authChecked) {
+    return null;
+  }
+
+  if (user) {
+    return <Navigate to="/browse" replace />;
+  }
 
   function handleSubmitForm(e) {
     e.preventDefault();
@@ -38,25 +57,25 @@ const Login = () => {
         auth,
         email.current.value,
         password.current.value,
-        name.current.value,
       )
         .then(async (userCredential) => {
           const user = userCredential.user;
-          updateProfile(user, {
-            displayName: name.current.value,
-            photoURL: "https://example.com/jane-q-user/profile.jpg",
-          })
-            .then(() => {
-              toast.success("Account Created Successfully");
-              navigate("/");
-            })
-            .catch((error) => {
-              toast.success(error.message);
-            });
-
+          const displayName = name.current?.value?.trim();
+          if (displayName) {
+            await updateProfile(user, { displayName });
+          }
+          dispatch(
+            addUser({
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+            }),
+          );
+          toast.success("Account Created Successfully");
           name.current.value = "";
           email.current.value = "";
           password.current.value = "";
+          navigate("/browse");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -82,7 +101,7 @@ const Login = () => {
           toast.success("Logged In Successfull");
           navigate("/browse");
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error("Invalid Credentials");
         });
     }
