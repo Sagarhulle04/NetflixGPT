@@ -1,19 +1,13 @@
 import React, { useEffect } from "react";
 import Header from "./Header";
 import { API_OPTIONS } from "../utils/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { addNowPlayingMovies } from "../utils/movieSlice";
+import { useNowPlaying } from "../hooks/useNowPlayingMovie";
 
 const Browse = () => {
-  useEffect(() => {
-    async function getNowPlayingData() {
-      const data = await fetch(
-        "https://api.themoviedb.org/3/trending/all/day",
-        API_OPTIONS,
-      );
-      const res = await data.json();
-      console.log(res);
-    }
-    getNowPlayingData();
-  }, []);
+  const movies = useSelector((store) => store.movie);
+  console.log(movies);
 
   return <div></div>;
 };

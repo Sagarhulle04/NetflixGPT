@@ -26,22 +26,6 @@ const Login = () => {
   const password = useRef(null);
   const name = useRef(null);
 
-  useEffect(() => {
-    const auth = getAuth(app);
-    const unsubscribe = onAuthStateChanged(auth, () => {
-      setAuthChecked(true);
-    });
-    return unsubscribe;
-  }, []);
-
-  if (!authChecked) {
-    return null;
-  }
-
-  if (user) {
-    return <Navigate to="/browse" replace />;
-  }
-
   function handleSubmitForm(e) {
     e.preventDefault();
 
@@ -64,18 +48,11 @@ const Login = () => {
           if (displayName) {
             await updateProfile(user, { displayName });
           }
-          dispatch(
-            addUser({
-              uid: user.uid,
-              email: user.email,
-              displayName: user.displayName,
-            }),
-          );
           toast.success("Account Created Successfully");
           name.current.value = "";
           email.current.value = "";
           password.current.value = "";
-          navigate("/browse");
+          navigate("/login");
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -91,13 +68,7 @@ const Login = () => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
-          dispatch(
-            addUser({
-              uid: user.uid,
-              email: user.email,
-              displayName: user.displayName,
-            }),
-          );
+
           toast.success("Logged In Successfull");
           navigate("/browse");
         })
