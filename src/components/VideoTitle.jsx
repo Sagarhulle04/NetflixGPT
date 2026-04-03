@@ -6,7 +6,7 @@ const VideoTitle = ({ movie }) => {
   const imageUrl = `https://image.tmdb.org/t/p/w500${movie?.poster_path || movie?.backdrop_path}`;
 
   return (
-    <div className=" items-center mt-40 ml-15 px-4">
+    <div className=" items-center mt-60 ml-15 px-4">
       <div className=" md:flex-row items-center md:items-start gap-6 md:gap-8">
         <img
           className="h-44 w-44 rounded-full object-cover shadow-lg hover:scale-105 transition-transform duration-300"
