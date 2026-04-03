@@ -43,11 +43,7 @@ const Header = () => {
   }, []);
 
   return (
-    <div
-      className={`px-10 z-10 bg-linear-to-b from-black ${
-        user && "bg-black shadow-md shadow-black/50"
-      }`}
-    >
+    <div className={`px-10 z-50 bg-transparent`}>
       {isLoading && <Spinner loading={isLoading} />}
       <div className="flex justify-between items-center max-w-1xl mx-auto">
         <Link to="/">

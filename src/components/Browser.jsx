@@ -7,7 +7,9 @@ const Browser = () => {
   useNowPlaying();
   return (
     <div>
-      <Header />
+      <div className="absolute w-full z-50 bg-transparent">
+        <Header />
+      </div>
       <MainContainer />
       <SecondaryContainer />
     </div>
