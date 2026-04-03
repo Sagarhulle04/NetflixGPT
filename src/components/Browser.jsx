@@ -1,17 +1,15 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useNowPlaying } from "../hooks/useNowPlayingMovie";
 import Header from "./Header";
-import { useNavigate } from "react-router-dom";
-import { getAuth, signOut } from "firebase/auth";
-import { removeUser } from "../utils/userSlice";
-import toast from "react-hot-toast";
-import Browse from "./Browse";
+import MainContainer from "./MainContainer";
+import SecondaryContainer from "./SecondaryContainer";
 
 const Browser = () => {
+  useNowPlaying();
   return (
     <div>
       <Header />
-      <Browse />
+      <MainContainer />
+      <SecondaryContainer />
     </div>
   );
 };

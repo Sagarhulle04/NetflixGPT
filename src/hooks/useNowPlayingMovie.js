@@ -9,10 +9,11 @@ export const useNowPlaying = () => {
   useEffect(() => {
     async function getNowPlayingData() {
       const data = await fetch(
-        "https://api.themoviedb.org/3/trending/all/day",
+        "https://api.themoviedb.org/3/movie/now_playing",
         API_OPTIONS,
       );
       const res = await data.json();
+      console.log(res.results);
       dispatch(addNowPlayingMovies(res.results));
     }
     getNowPlayingData();

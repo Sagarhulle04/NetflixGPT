@@ -5,25 +5,6 @@ import { Navigate, Outlet } from "react-router-dom";
 import app from "../utils/firebase";
 
 const AppLayout = () => {
-  const [authChecked, setAuthChecked] = useState(false);
-  const user = useSelector((store) => store.user);
-
-  useEffect(() => {
-    const auth = getAuth(app);
-    const unsubscribe = onAuthStateChanged(auth, () => {
-      setAuthChecked(true);
-    });
-    return unsubscribe;
-  }, []);
-
-  if (!authChecked) {
-    return null;
-  }
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
   return (
     <div>
       <Outlet />
