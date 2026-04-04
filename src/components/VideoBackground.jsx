@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { API_OPTIONS } from "../utils/constants";
 import Spinner from "./Spinner";
 import useBackgroundMovie from "../hooks/useBackgroundMovie";
+import SecondaryContainer from "./SecondaryContainer";
 
 export default function VideoBackground({ movie }) {
   // console.log(movie);
@@ -11,11 +12,11 @@ export default function VideoBackground({ movie }) {
   if (!movie?.id) return null;
 
   return (
-    <div className="fixed inset-0 -z-10 w-screen overflow-hidden">
+    <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
       {isLoading ? (
         <Spinner />
       ) : videoKey ? (
-        <div className="absolute top-0 left-0 w-screen h-full">
+        <div className="absolute top-0 left-0 ">
           <div className="absolute top-0 left-0 w-screen aspect-video overflow-hidden">
             <iframe
               className="absolute top-1/2 left-1/2 min-w-[177.78%] min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 pointer-events-none scale-150"

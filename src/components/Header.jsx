@@ -14,6 +14,7 @@ const Header = () => {
   const user = useSelector((store) => store.user);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [showBg, setShowBg] = useState(false);
 
   function handleSignOut() {
     const auth = getAuth();
@@ -30,7 +31,7 @@ const Header = () => {
 
   useEffect(() => {
     const auth = getAuth(app);
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const { uid, email, displayName } = user;
         dispatch(addUser({ uid: uid, email: email, displayName: displayName }));
@@ -40,10 +41,29 @@ const Header = () => {
       }
       setIsLoading(false);
     });
+    return () => unsubscribe();
+  }, [dispatch, navigate]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 30) {
+        setShowBg(true);
+      } else {
+        setShowBg(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className={`px-10 z-50 bg-transparent`}>
+    <div
+      className={`fixed top-0 px-10 z-50 w-full transition-all duration-300 ${
+        showBg ? "bg-black shadow-lg" : "bg-transparent"
+      }`}
+    >
       {isLoading && <Spinner loading={isLoading} />}
       <div className="flex justify-between items-center max-w-1xl mx-auto">
         <Link to="/">
