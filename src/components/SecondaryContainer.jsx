@@ -14,8 +14,8 @@ const SecondaryContainer = () => {
   // console.log(nowAddTV);
 
   return (
-    <div className="bg-black text-white w-screen">
-      <div className="p-4 md:p-10 relative z-20 flex flex-col gap-8">
+    <div className="bg-black text-white w-full">
+      <div className="py-6 md:py-8 relative z-20 flex flex-col gap-2 md:gap-4">
         <MovieList title="Popular" movies={nowPopularMovies} />
         <MovieList title="Now Playing" movies={nowPlayingMovies} />
         <MovieList title="Top Rated" movies={nowTopRatedMovies} />

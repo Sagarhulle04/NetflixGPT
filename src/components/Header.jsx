@@ -1,15 +1,17 @@
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import app from "../utils/firebase";
 import { addUser, removeUser } from "../utils/userSlice";
 import Spinner from "./Spinner";
 import toast from "react-hot-toast";
+import { IoLanguage } from "react-icons/io5";
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const user = useSelector((store) => store.user);
 
@@ -73,7 +75,7 @@ const Header = () => {
             className="h-20 w-60"
           />
         </Link>
-        {user && (
+        {user ? (
           <div className="flex gap-2 items-center">
             <p className="font-bold text-white">{user.displayName}</p>
             <button
@@ -89,6 +91,24 @@ const Header = () => {
               alt="children-image"
             />
           </div>
+        ) : (
+          location.pathname === "/" && (
+            <div className="flex gap-6 items-center">
+              <div className="flex gap-1.5 px-3 py-2 border cursor-pointer bg-black rounded-sm text-white">
+                <IoLanguage size={20} color="white" />
+                <select className="cursor-pointer bg-black text-white focus:outline-none">
+                  <option value="english">English</option>
+                  <option value="hindi">Hindi</option>
+                </select>
+              </div>
+
+              <Link to="/login">
+                <button className="bg-red-600 px-4 py-2 cursor-pointer text-white font-semibold rounded-md hover:bg-red-700 transition-colors duration-200">
+                  Sign In
+                </button>
+              </Link>
+            </div>
+          )
         )}
       </div>
     </div>

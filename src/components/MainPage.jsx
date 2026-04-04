@@ -1,6 +1,5 @@
 import React from "react";
 import Header from "./Header";
-import { IoLanguage } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
 const MainPage = () => {
@@ -16,21 +15,8 @@ const MainPage = () => {
       <div className="absolute inset-0 bg-black/60 z-0"></div>
 
       {/* Header */}
-      <div className=" w-11/12 relative z-20 flex justify-between items-center">
+      <div className="relative z-20">
         <Header />
-        <div className="flex gap-6 ">
-          <div className="flex gap-1.5  px-3 py-2 border cursor-pointer bg-black rounded-sm text-white">
-            <IoLanguage size={20} color="white" />
-            <select className="cursor-pointer bg-black   ">
-              <option value="english">English</option>
-              <option value="hindi">Hindi</option>
-            </select>
-          </div>
-
-          <button className="bg-red-500 px-4 py-2 cursor-pointer text-white rounded-md hover:bg-red-700">
-            <Link to="/login">Login</Link>
-          </button>
-        </div>
       </div>
 
       <div className="max-w-[45%] text-center mx-auto flex relative top-30 flex-col  items-center text-white">
