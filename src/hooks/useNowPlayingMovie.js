@@ -9,7 +9,7 @@ export const useNowPlaying = () => {
   useEffect(() => {
     async function getNowPlayingData() {
       const data = await fetch(
-        "https://api.themoviedb.org/3/movie/now_playing",
+        "https://api.themoviedb.org/3/movie/now_playing?language=IN&page=1",
         API_OPTIONS,
       );
       const res = await data.json();

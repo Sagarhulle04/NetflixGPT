@@ -11,7 +11,6 @@ const Browser = () => {
         <Header />
       </div>
       <MainContainer />
-      <SecondaryContainer />
     </div>
   );
 };
