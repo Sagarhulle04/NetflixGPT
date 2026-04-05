@@ -11,7 +11,7 @@ const VideoTitle = ({ movie, mute, setMute }) => {
       <div className="flex items-center mt-15 md:mt-60 ml-4 md:ml-15 px-4 relative z-10 w-full overflow-hidden">
         <div className=" md:flex-row items-center md:items-start gap-6 md:gap-8">
           <img
-            className="h-44 w-44 rounded-full object-cover shadow-lg hover:scale-105 transition-transform duration-300"
+            className="h-44 cursor-pointer w-44 rounded-full object-cover shadow-lg hover:scale-105 transition-transform duration-300"
             src={imageUrl}
             alt={movie?.title || "Movie Poster"}
           />

@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import MovieList from "./MovieList";
-import { API_OPTIONS } from "../utils/constants";
-import { useNowPlaying } from "../hooks/useNowPlayingMovie";
 import { useSelector } from "react-redux";
 
 const SecondaryContainer = () => {
@@ -11,7 +9,6 @@ const SecondaryContainer = () => {
   const nowUpComingMovie = useSelector((store) => store.movie?.upcoming);
   const nowAddMovies = useSelector((store) => store.movie?.movies);
   const nowAddTV = useSelector((store) => store.movie?.tv);
-  // console.log(nowAddTV);
 
   return (
     <div className="bg-black text-white w-full">

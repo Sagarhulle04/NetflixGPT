@@ -20,6 +20,7 @@ const MovieList = ({ title, movies }) => {
                     src={`https://image.tmdb.org/t/p/w500/${movie?.poster_path}`}
                     alt={`Poster of ${movie?.title}`}
                     className="w-full h-full object-cover rounded-md md:rounded-lg shadow-lg aspect-2/3"
+                    onClick={() => console.log(movie?.id)}
                   />
                 </div>
               );
