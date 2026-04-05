@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const MovieList = ({ title, movies }) => {
   return (
@@ -16,12 +17,14 @@ const MovieList = ({ title, movies }) => {
                   key={movie.id}
                   className="w-36 md:w-48 shrink-0 cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-20 origin-center"
                 >
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500/${movie?.poster_path}`}
-                    alt={`Poster of ${movie?.title}`}
-                    className="w-full h-full object-cover rounded-md md:rounded-lg shadow-lg aspect-2/3"
-                    onClick={() => console.log(movie?.id)}
-                  />
+                  <Link to={`/browse/movie/${movie?.id}`}>
+                    <img
+                      src={`https://image.tmdb.org/t/p/w500/${movie?.poster_path}`}
+                      alt={`Poster of ${movie?.title}`}
+                      className="w-full h-full object-cover rounded-md md:rounded-lg shadow-lg aspect-2/3"
+                      onClick={() => console.log(movie?.id)}
+                    />
+                  </Link>
                 </div>
               );
             })}

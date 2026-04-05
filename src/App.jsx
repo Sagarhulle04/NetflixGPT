@@ -9,6 +9,7 @@ import Login from "./components/Login";
 import MainPage from "./components/MainPage";
 import { Toaster } from "react-hot-toast";
 import Browser from "./components/Browser";
+import MovieDetail from "./components/MovieDetail";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,7 @@ const App = () => {
       <Routes>
         <Route path="/browse" element={<AppLayout />}>
           <Route index element={<Browser />} />
+          <Route path="movie/:id" element={<MovieDetail />} />
         </Route>
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<Login />} />
