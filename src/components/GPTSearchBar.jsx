@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { GoogleGenAI } from "@google/genai";
 import { API_OPTIONS } from "../utils/constants";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addMovies, setLoading } from "../utils/gptMovieSlice";
-import GPTMovieSuggestion from "./GPTMovieSuggestion";
+import toast from "react-hot-toast";
 
 const GPTSearchBar = () => {
   const dispatch = useDispatch();
@@ -24,33 +24,55 @@ const GPTSearchBar = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
 
+    const queryText = searchText.trim();
+    if (!queryText) {
+      toast.error("Please enter a movie prompt before searching.");
+      return;
+    }
+
     dispatch(setLoading(true));
 
-    const query =
-      "Act as a movie recommendation system and suggust some movie for the query : " +
-      searchText +
-      ". Only give me 5 movies name, comma seperated like the example result given ahead. Example result: Gadar, Singham, Golmaal, DHurandar, Prem Ratan Dhan Payo";
+    try {
+      const query =
+        "Act as a movie recommendation system and suggust some movie for the query : " +
+        queryText +
+        ". Only give me 5 movies name, comma seperated like the example result given ahead. Example result: Gadar, Singham, Golmaal, DHurandar, Prem Ratan Dhan Payo";
 
-    const ai = new GoogleGenAI({
-      apiKey: import.meta.env.VITE_GEMINI_API_KEY,
-    });
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY?.trim();
+      if (!apiKey) {
+        toast.error(
+          "Gemini API key is missing. Please set VITE_GEMINI_API_KEY in .env.",
+        );
+        return;
+      }
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: query,
-    });
+      const ai = new GoogleGenAI({
+        apiKey,
+      });
 
-    const gptMovieList = response.text.split(",");
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: query,
+      });
 
-    // console.log(gptMovieList);
+      const gptMovieList = response.text
+        .split(",")
+        .map((movie) => movie.trim())
+        .filter(Boolean);
 
-    const serachMovies = gptMovieList.map((movie) => tmdbSearchMovie(movie));
+      const searchMovies = gptMovieList.map((movie) => tmdbSearchMovie(movie));
+      const data = await Promise.all(searchMovies);
 
-    const data = await Promise.all(serachMovies);
-
-    dispatch(addMovies(data));
-
-    // console.log(data);
+      dispatch(addMovies(data));
+    } catch (error) {
+      console.error("GPT search failed:", error);
+      toast.error(
+        error?.message ||
+          "Failed to fetch movie recommendations. Please try again.",
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   return (
