@@ -7,6 +7,7 @@ import { addUser, removeUser } from "../utils/userSlice";
 import Spinner from "./Spinner";
 import toast from "react-hot-toast";
 import { IoLanguage } from "react-icons/io5";
+import { toggle } from "../utils/gptToggle";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const Header = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [showBg, setShowBg] = useState(false);
+  const [gptSearch, setGptSearch] = useState(false);
 
   function handleSignOut() {
     const auth = getAuth();
@@ -60,6 +62,13 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  function handleGptToggle() {
+    setGptSearch(!gptSearch);
+    dispatch(toggle(gptSearch));
+  }
+
+  const gpt = useSelector((store) => store.gpt);
+
   return (
     <div
       className={`fixed top-0 px-10 z-50 w-full transition-all duration-300 ${
@@ -78,6 +87,12 @@ const Header = () => {
         {user ? (
           <div className="flex gap-2 items-center">
             <p className="font-bold text-white">{user.displayName}</p>
+            <button
+              onClick={handleGptToggle}
+              className="mx-2 my-4 px-2 py-2 bg-white rounded-lg cursor-pointer"
+            >
+              {gpt ? "Homepage" : " GPT Search"}
+            </button>
             <button
               type="button"
               onClick={handleSignOut}

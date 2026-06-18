@@ -4,9 +4,11 @@ import { usePopularMovie } from "../hooks/usePopularMovie";
 import { useTopRated } from "../hooks/useTopRated";
 import { useAddTV } from "../hooks/useTv";
 import { useUpComing } from "../hooks/useUpComing";
+import GPTSearch from "./GPTSearch";
 import Header from "./Header";
 import MainContainer from "./MainContainer";
 import SecondaryContainer from "./SecondaryContainer";
+import { useSelector } from "react-redux";
 
 const Browser = () => {
   useNowPlaying();
@@ -16,13 +18,23 @@ const Browser = () => {
   useAddMovies();
   useAddTV();
 
+  const gpt = useSelector((store) => store.gpt);
+  console.log(gpt);
+
   return (
     <div>
       <div className="absolute w-full z-50 bg-transparent">
         <Header />
       </div>
-      <MainContainer />
-      <SecondaryContainer />
+      {gpt ? (
+        <GPTSearch />
+      ) : (
+        <>
+          {" "}
+          <MainContainer />
+          <SecondaryContainer />
+        </>
+      )}
     </div>
   );
 };

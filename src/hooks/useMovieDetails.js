@@ -11,7 +11,7 @@ export const useMovieDetails = (id) => {
 
     async function getMovieDetails() {
       const data = await fetch(
-        `https://api.themoviedb.org/3/movie/${id}`,
+        `https://api.themoviedb.org/3/movie/${id}?append_to_response=videos`,
         API_OPTIONS,
       );
       const res = await data.json();
